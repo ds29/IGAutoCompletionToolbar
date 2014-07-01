@@ -20,6 +20,7 @@ NSString* const IGAutoCompletionToolbarCellID = @"IGAutoCompletionToolbarCellID"
 
 @synthesize textField = _textField;
 @synthesize items = _items, filteredItems = _filteredItems, filter = _filter;
+@synthesize shouldHideItemsWhenFilterIsEmpty = _shouldHideItemsWhenFilterIsEmpty;
 
 -(id) initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame collectionViewLayout:[[IGAutoCompletionToolbarLayout alloc] init]];
@@ -39,6 +40,8 @@ NSString* const IGAutoCompletionToolbarCellID = @"IGAutoCompletionToolbarCellID"
 
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
+        
+        self.shouldHideItemsWhenFilterIsEmpty = NO;
     }
     return self;
 }
@@ -148,7 +151,9 @@ NSString* const IGAutoCompletionToolbarCellID = @"IGAutoCompletionToolbarCellID"
     NSMutableArray* newFilteredItems = [NSMutableArray array];
     [self.items enumerateObjectsUsingBlock:^(id<NSObject> obj, NSUInteger idx, BOOL *stop) {
         if (!self.filter || [self.filter isEqualToString:@""]) {
-            [newFilteredItems addObject:obj];
+            if (!self.shouldHideItemsWhenFilterIsEmpty) {
+                [newFilteredItems addObject:obj];
+            }
             return;
         }
 

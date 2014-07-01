@@ -25,6 +25,7 @@
     [[IGAutoCompletionToolbarCell appearance] setTextFont:[UIFont fontWithName:@"HelveticaNeue" size:14.0]];
 
     self.toolbar = [[IGAutoCompletionToolbar alloc] initWithFrame:CGRectMake(0,0,320,44)];
+    self.toolbar.shouldHideItemsWhenFilterIsEmpty = YES;
     self.toolbar.items = @[@"Apple", @"Banana", @"Blueberry", @"Grape", @"Pineapple", @"Orange", @"Pear"];
     self.toolbar.toolbarDelegate = self;
 

@@ -45,6 +45,7 @@ extern NSString* const IGAutoCompletionToolbarCellID;
 @property (nonatomic, weak) UITextField* textField;
 @property (nonatomic, strong) NSString* filter;
 @property (nonatomic, strong) NSArray* items;
+@property (nonatomic, assign) BOOL shouldHideItemsWhenFilterIsEmpty;
 @property (nonatomic, strong, readonly) NSMutableArray* filteredItems;
 
 @property (nonatomic, strong) CAGradientLayer* gradientLayer;
