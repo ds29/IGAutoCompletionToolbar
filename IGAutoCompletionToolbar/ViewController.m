@@ -35,6 +35,10 @@
 
 #pragma mark - IGAutoCompletionToolbarDelegate
 
+-(NSMutableArray*)autoCompletionToolbar:(IGAutoCompletionToolbar *)toolbar objectsWithFilter:(NSString *)filter {
+    return [[toolbar.items filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF contains[cd] %@", filter]] mutableCopy];
+}
+
 - (void) autoCompletionToolbar:(IGAutoCompletionToolbar*)toolbar didSelectItemWithObject:(id)object {
     NSLog(@"tag selected - %@", object);
 }

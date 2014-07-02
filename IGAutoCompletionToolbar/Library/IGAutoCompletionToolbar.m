@@ -148,35 +148,41 @@ NSString* const IGAutoCompletionToolbarCellID = @"IGAutoCompletionToolbarCellID"
 #pragma mark - Private
 
 - (void) reloadFilteredItems {
-    NSMutableArray* newFilteredItems = [NSMutableArray array];
-    [self.items enumerateObjectsUsingBlock:^(id<NSObject> obj, NSUInteger idx, BOOL *stop) {
-        if (!self.filter || [self.filter isEqualToString:@""]) {
-            if (!self.shouldHideItemsWhenFilterIsEmpty) {
-                [newFilteredItems addObject:obj];
-            }
-            return;
-        }
+    if (self.toolbarDelegate && [self.toolbarDelegate respondsToSelector:@selector(autoCompletionToolbar:objectsWithFilter:)]) {
+        _filteredItems = [self.toolbarDelegate autoCompletionToolbar:self objectsWithFilter:self.filter];
+    }
+    else {
+        NSMutableArray* newFilteredItems = [NSMutableArray array];
 
-        if (self.toolbarDelegate && [self.toolbarDelegate respondsToSelector:@selector(autoCompletionToolbar:shouldAcceptObject:withFilter:)]) {
-            if ([self.toolbarDelegate autoCompletionToolbar:self shouldAcceptObject:obj withFilter:self.filter]) {
-                [newFilteredItems addObject:obj];
+        [self.items enumerateObjectsUsingBlock:^(id<NSObject> obj, NSUInteger idx, BOOL *stop) {
+            if (!self.filter || [self.filter isEqualToString:@""]) {
+                if (!self.shouldHideItemsWhenFilterIsEmpty) {
+                    [newFilteredItems addObject:obj];
+                }
+                return;
             }
 
-        } else {
-            NSString* content = nil;
-            if ([obj isMemberOfClass:[NSString class]]) {
-                content = (NSString*) obj;
+            if (self.toolbarDelegate && [self.toolbarDelegate respondsToSelector:@selector(autoCompletionToolbar:shouldAcceptObject:withFilter:)]) {
+                if ([self.toolbarDelegate autoCompletionToolbar:self shouldAcceptObject:obj withFilter:self.filter]) {
+                    [newFilteredItems addObject:obj];
+                }
+
             } else {
-                content = [obj description];
-            }
+                NSString* content = nil;
+                if ([obj isMemberOfClass:[NSString class]]) {
+                    content = (NSString*) obj;
+                } else {
+                    content = [obj description];
+                }
 
-            if ([content rangeOfString:self.filter options:NSCaseInsensitiveSearch].location != NSNotFound) {
-                [newFilteredItems addObject:obj];
+                if ([content rangeOfString:self.filter options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                    [newFilteredItems addObject:obj];
+                }
             }
-        }
-    }];
-    
-    _filteredItems = newFilteredItems;
+        }];
+        _filteredItems = newFilteredItems;
+
+    }
 }
 
 @end

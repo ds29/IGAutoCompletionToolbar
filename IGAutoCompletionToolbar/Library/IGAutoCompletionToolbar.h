@@ -34,6 +34,9 @@ extern NSString* const IGAutoCompletionToolbarCellID;
 // If you implement autoCompletionToolbar:setupCell:withObject:, you would probably want to implement this.
 -(CGSize) autoCompletionToolbar:(IGAutoCompletionToolbar*)toolbar cellSizeWithObject:(id)object;
 
+// Array of filtered results (used as an alternative to autoCompletionToolbar:shouldAcceptObject:withFilter)
+-(NSMutableArray*)autoCompletionToolbar:(IGAutoCompletionToolbar*)toolbar objectsWithFilter:(NSString*)filter;
+
 @end
 
 @interface IGAutoCompletionToolbar : UICollectionView <UICollectionViewDataSource, UICollectionViewDelegate, IGAutoCompletionToolbarLayoutDelegate> {
